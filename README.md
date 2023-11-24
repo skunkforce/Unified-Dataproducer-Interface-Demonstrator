@@ -26,3 +26,29 @@ The following diagram might clarify some questions.
 [![Architecture-Diagram](https://lucid.app/publicSegments/view/9e17748f-074c-4f78-afd4-eeac6ea42f19/image.png)](https://lucid.app/publicSegments/view/9e17748f-074c-4f78-afd4-eeac6ea42f19/image.png)
 
 From our expectations so far, Linux-`.so` and Windows-`.dll` need to be maintained separately from oneanother.
+
+
+After creating `lib.hpp` and `lib.cpp`, use the following Terminal commands to create a shared library on Linux:
+
+// Convert the library code to object file
+`g++ -std=c++23 -c lib.cpp -fPIC -o lib.o`
+
+// Create a shared `.so` library
+`g++ -std=c++23 -shared -o liblib.so lib.o`
+
+// create client source 
+`main.cpp`
+
+// Create the executable by linking the shared library
+`g++ -std=c++23 -L. -Wall -o main main.cpp -llib`
+
+// Make shared library available at runtime
+`export LD_LIBRARY_PATH=.`
+
+// Create `CMakeLists.txt` file and then
+
+`mkdir build`
+`cd build`
+`cmake ...`
+`make`
+`./main`
