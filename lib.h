@@ -133,9 +133,9 @@ DLL_EXPORT int uadi_wait_blockingly_for_data(int microseconds);
  * @brief Attempt to release a claimed device.
  * 
  * @param device_handle Handle to the device.
- * @return int UADI_SUCCESS on successful release, UADI_INVALID_HANDLE if the device handle is invalid, or other non-zero error codes on failure.
+ * @return nullptr on successful release or a valid uadi_chunk_ptr if the output-queue isn't yet empty.
  */
-DLL_EXPORT int uadi_try_release_device(uadi_device_handle device_handle);
+DLL_EXPORT uadi_chunk_ptr uadi_try_release_device(uadi_device_handle device_handle);
 
 #ifdef __cplusplus
 }
