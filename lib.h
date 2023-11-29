@@ -59,10 +59,20 @@ typedef unsigned char* uadi_chunk_ptr;
  * is an array of floats. Information packets are JSON strings.
  * @see uadi_pop_chunk
  */
-typedef struct {
+struct uadi_receive_struct {
     uadi_chunk_ptr infopack_ptr;
     uadi_chunk_ptr datapack_ptr;
-} uadi_receive_struct, *uadi_receive_struct_ptr;
+};
+
+/** 
+ * @brief Typedef for uadi_receive_struct.
+ */
+typedef struct uadi_receive_struct uadi_receive_struct;
+
+/** 
+ * @brief Typedef for pointer to uadi_receive_struct.
+ */
+typedef uadi_receive_struct* uadi_receive_struct_ptr;
 
 // Error codes
 #define UADI_SUCCESS 0
@@ -75,11 +85,19 @@ typedef struct {
 /**
  * @brief Initialize the library and get a library handle.
  * 
- * @param buffer Pointer to a memory buffer for metadata. The buffer should be at least 128KB.
- * @param buffer_length Length of the provided memory buffer.
  * @return uadi_lib_handle A handle to the library instance. Returns nullptr if buffer is too small or other initialization errors occur.
  */
-DLL_EXPORT uadi_lib_handle uadi_init(char* buffer, size_t buffer_length);
+DLL_EXPORT uadi_lib_handle uadi_init();
+
+/**
+ * @brief Initialize the library and get a library handle.
+ * 
+ * @param handle Handle to the library instance, previously acquired by uadi_init().
+ * @param buffer Pointer to a memory buffer for metadata. The buffer should be at least 128KB.
+ * @param buffer_length Length of the provided memory buffer.
+ * @return int UADI_SUCCESS on success, UADI_BUFFER_TOO_SMALL if buffer is too small, or other non-zero error codes on failure.
+ */
+DLL_EXPORT int uadi_get_metadata(uadi_lib_handle handle, char* buffer, size_t buffer_length);
 
 /**
  * @brief Enumerate available data producers.
@@ -94,13 +112,13 @@ DLL_EXPORT int uadi_enumerate(uadi_lib_handle handle, char* buffer, size_t buffe
 /**
  * @brief Claim exclusive access to a data producer.
  * 
- * @param device_handle Handle to the device.
+ * @param device_handle Handle to the library instance.
  * @param device_key Null-terminated string containing the device key.
  * @param chunk_array Pointer to an array of memory chunks. Chunks should be contiguous and at least 128KB each.
  * @param chunk_count Number of chunks in the array.
  * @return uadi_device_handle A handle to the claimed device, or nullptr on failure (e.g., invalid handle, device not available).
  */
-DLL_EXPORT uadi_device_handle uadi_claim_device(uadi_device_handle device_handle, const char* device_key, uadi_chunk_ptr* chunk_array, size_t chunk_count);
+DLL_EXPORT uadi_device_handle uadi_claim_device(uadi_lib_handle handle, const char* device_key, uadi_chunk_ptr* chunk_array, size_t chunk_count);
 
 /**
  * @brief Push a set of chunks to a device's empty chunk queue.
