@@ -18,7 +18,7 @@ typedef void* uadi_device_handle;
 
 typedef unsigned char* uadi_chunk_ptr;
 
-typedef struct uadi_receive_struct{
+struct uadi_receive_struct{
     uadi_chunk_ptr infopack_ptr;
     uadi_chunk_ptr datapack_ptr;
 };
@@ -34,9 +34,9 @@ typedef struct uadi_receive_struct{
 
 typedef int uadi_status;
 
-typedef void(uadi_error_callback*)(uadi_status, void*);
-typedef void(uadi_receive_callback*)(uadi_receive_struct, void*);
-typedef void(uadi_release_callback*)(uadi_chunk_ptr, void*);
+typedef void(*uadi_error_callback)(uadi_status, void*);
+typedef void(*uadi_receive_callback)(uadi_receive_struct, void*);
+typedef void(*uadi_release_callback)(uadi_chunk_ptr, void*);
 
 DLL_EXPORT uadi_status uadi_init(uadi_lib_handle* lib_handle);
 
