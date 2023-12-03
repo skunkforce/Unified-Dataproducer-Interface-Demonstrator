@@ -21,6 +21,7 @@ typedef unsigned char* uadi_chunk_ptr;
 struct uadi_receive_struct{
     uadi_chunk_ptr infopack_ptr;
     uadi_chunk_ptr datapack_ptr;
+    uadi_status status;
 };
 
 // Error codes
@@ -34,9 +35,7 @@ struct uadi_receive_struct{
 
 typedef int uadi_status;
 
-typedef void(*uadi_error_callback)(uadi_status, void*);
 typedef void(*uadi_receive_callback)(uadi_receive_struct, void*);
-typedef void(*uadi_release_callback)(uadi_chunk_ptr, void*);
 
 DLL_EXPORT uadi_status uadi_init(uadi_lib_handle* lib_handle);
 
@@ -50,11 +49,9 @@ DLL_EXPORT uadi_status uadi_push_chunks(uadi_device_handle device_handle, uadi_c
 
 DLL_EXPORT uadi_status uadi_register_receive_callback(uadi_device_handle device_handle, uadi_receive_callback callback, void* user_data);
 
-DLL_EXPORT uadi_status uadi_register_error_callback(uadi_device_handle device_handle, uadi_error_callback callback, void* user_data);
+DLL_EXPORT uadi_status uadi_release_device(uadi_device_handle device_handle, void* user_data);
 
-DLL_EXPORT uadi_status uadi_release_device(uadi_device_handle device_handle, uadi_release_callback callback, void* user_data);
-
-DLL_EXPORT uadi_status uadi_release_lib(uadi_lib_handle lib_handle, uadi_release_callback callback, void* user_data);
+DLL_EXPORT uadi_status uadi_release_lib(uadi_lib_handle lib_handle, void* user_data);
 
 #ifdef __cplusplus
 }
